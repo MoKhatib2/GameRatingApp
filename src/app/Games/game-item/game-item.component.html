@@ -1,0 +1,11 @@
+
+<div class="row">
+    <div class="col-xs-2">
+        <div class="game-panel" [style.background]="game.mainColor" appToggleGamePanel>
+            <img [src]="game.imageIconURL" alt="TLOU-icon" [style]="{ width: game.iconWidth + 'px', height: game.iconHeight + 'px', 'object-fit': 'cover' }">
+            <button class="go-btn hidden" (click)="onGoToGame()">Go To Game</button>
+        </div>
+    </div>
+</div>
+
+
