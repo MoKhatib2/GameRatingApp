@@ -21,13 +21,25 @@ import {
     @HostListener('document:click', ['$event']) toggleOpen(eventData: Event){
       if (this.elRef.nativeElement.contains(eventData.target)) {
         if(!this.elRef.nativeElement.querySelector('.go-btn').contains(eventData.target)){
-          this.elRef.nativeElement.querySelector('img').classList.toggle('hidden');
-          this.elRef.nativeElement.querySelector('.go-btn').classList.toggle('hidden');
+          this.elRef.nativeElement.querySelector('#icon').classList.toggle('hidden');
+          if(!this.isOpen){
+            setTimeout(() => {
+              this.elRef.nativeElement.querySelector('.game-title').classList.toggle('hidden');
+              this.elRef.nativeElement.querySelector('#full_image').classList.toggle('hidden');
+              this.elRef.nativeElement.querySelector('.go-btn').classList.toggle('hidden');
+            }, 80);
+          } else {
+            this.elRef.nativeElement.querySelector('.game-title').classList.toggle('hidden');
+            this.elRef.nativeElement.querySelector('#full_image').classList.toggle('hidden');
+            this.elRef.nativeElement.querySelector('.go-btn').classList.toggle('hidden');
+          }
           this.isOpen = !this.isOpen;
         }
       } else {
         if (this.isOpen) {
-          this.elRef.nativeElement.querySelector('img').classList.toggle('hidden');
+          this.elRef.nativeElement.querySelector('.game-title').classList.toggle('hidden');
+          this.elRef.nativeElement.querySelector('#icon').classList.toggle('hidden');
+          this.elRef.nativeElement.querySelector('#full_image').classList.toggle('hidden');
           this.elRef.nativeElement.querySelector('.go-btn').classList.toggle('hidden');
         }
         this.isOpen = false;

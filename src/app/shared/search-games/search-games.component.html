@@ -1,0 +1,15 @@
+<p-autoComplete 
+    [(ngModel)]="selectedGame" 
+    [suggestions]="filteredGames" 
+    (completeMethod)="filterGame($event)" 
+    field="name">
+        <ng-template let-game pTemplate="item">
+            <div class="flex align-items-center gap-2">
+                <!-- <img 
+                    src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
+                    [class]="'flag flag-' + country.code.toLowerCase()" 
+                    style="width: 18px" /> -->
+                <div>{{ game.name }}</div>
+            </div>
+        </ng-template>
+</p-autoComplete>

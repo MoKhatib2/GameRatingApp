@@ -16,7 +16,6 @@ export const AuthGaurd : CanActivateFn =
         const authService = inject(AuthService);
         const router = inject(Router)
         return authService.userSubj.pipe(map(user => {
-            console.log(user);
             if( user ){
                 return true;
             }

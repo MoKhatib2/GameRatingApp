@@ -2,10 +2,9 @@ export class Game {
     constructor(
         public name: string, 
         public mainColor: string, 
-        public imageIconURL: string, 
-        public iconWidth: number, 
-        public iconHeight: number,
-        public imageURL: string,
+        public imageIconPath: string, 
+        public imagePath: string,  
+        public coverPath: string,
         public description: string,
         public releaseDate: Date,
         public rating: number,

@@ -1,20 +1,19 @@
 <div class="container">
     <div class="row">
-        <div class="col-xs-6">
-            <img src="" alt="">
+        <div class="col-xs-2">
+            <img [src]="game.coverPath" alt="" style="width: 202px; height: 249px;">
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-6 game-details" style="margin-left: 30px;">
             <p>Name: {{ game.name }}</p>
-            <p>Release Date: {{ game.releaseDate }}</p>
+            <p>Release Date: {{ game.releaseDate | date: 'dd/MM/yyyy'}}</p>
             <p>Description: {{ game.description }}</p>
+            <p>Overall Rating: {{ game.rating  }}/5 <fa-icon [icon]="faStar" style="color: #f7bd0f;"></fa-icon> </p> 
         </div>
     </div>
     <hr>
     <div style="margin-left: 20px;" class="row">
         <div class="row">
-            <div class="col-xs-12">
-                <h2>Rate this game</h2>
-            </div>
+            <h2>Rate this game</h2>
         </div>
         <div class="row">
             <form [formGroup]="ratingForm" (ngSubmit)="onSubmit()">
@@ -75,24 +74,28 @@
                     <p style="color: red; font-size: 15px; font-weight: 200;" *ngIf="ratingErrorMessage">please give a rating before submitting</p>
                 </div>
                 <div class="btn-group">
-                    <button class="btn-success">{{ gameReviewedBefore? 'Update Review' : 'Add Review' }}</button> 
+                    <button class="btn-success" style="margin-right: 20px;">{{ gameReviewedBefore? 'Update Review' : 'Add Review' }}</button> 
                     <button class="btn-danger" type="button" *ngIf="gameReviewedBefore">Delete Review</button>
                 </div>
             </form>
         </div>
     </div>
     <hr>
-    <div>
+    <div class="row">
+        <div style="margin-left: 15px;" class="row">
+            <h2>Reviews</h2>
+        </div>
         <div class="review_item" *ngFor="let currGameReview of currGameReviews">
             <h3>
-                <fa-icon [icon]="faThumbsUp" style="color: #1f9cff;" *ngIf="currGameReview.enjoyedGame"></fa-icon>
-                <fa-icon [icon]="faThumbsDown"  style="color: #f02916;" *ngIf="!currGameReview.enjoyedGame"></fa-icon>
-                {{ currGameReview.username }} {{ currGameReview.enjoyedGame ? 'enjoyed this game': 'did not enjoy this game'}}
+                <img class="profile-image" [src]="currGameReview.user.profileImagePath && currGameReview.user.profileImagePath != '' ? currGameReview.user.profileImagePath : defaultProfileImagePath " alt="">
+                {{ currGameReview.user.username }} {{ currGameReview.review.enjoyedGame ? 'enjoyed this game': 'did not enjoy this game'}}
+                <fa-icon [icon]="faThumbsUp" style="color: #1f9cff;" *ngIf="currGameReview.review.enjoyedGame"></fa-icon>
+                <fa-icon [icon]="faThumbsDown"  style="color: #f02916;" *ngIf="!currGameReview.review.enjoyedGame"></fa-icon>
             </h3>
-            <p>{{ currGameReview.thoughtsOnGame }}</p>
+            <p>{{ currGameReview.review.thoughtsOnGame }}</p>
             <p> 
                 <fa-icon [icon]="faStar" style="color: #f7bd0f;"></fa-icon> 
-                {{ currGameReview.rating + '/5'}}
+                {{ currGameReview.review.rating + '/5'}}
             </p>
         </div>
     </div>

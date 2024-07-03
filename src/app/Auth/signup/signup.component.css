@@ -1,0 +1,102 @@
+h2{
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+}
+
+.wrapper {
+    position: relative;
+    width: 600px;
+    height: 800px;
+    background: rgb(19, 19, 19);
+    border: 2px solid rgba(255,255,255,.4);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 3-px rgba(0,0,0,.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /*overflow: hidden;*/
+}
+
+.wrapper .form-box{
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.input-box{
+    position: relative;
+    width: 100%;
+    height:50px;
+    margin-bottom: 50px;
+}
+
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    outline: none;
+    font-size: 1em;
+    color: #fff;
+    font-weight: 600;
+    padding: 0;
+    border: 2px solid rgba(255,255,255,.4);
+}
+
+.input-box label {
+    color: white;
+    font-size: 14px;
+}
+
+.btn-submit{
+    position: relative;
+    width: 100%;
+    height:45px;
+    background:  #fff;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    color: rgb(32, 30, 30);
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.btn-submit:hover {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-go {
+    position: relative;
+    background: transparent;
+    width: 50%;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 100%;
+}
+
+input.ng-invalid.ng-touched{
+    border: 2px solid;
+    border-color: red;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px #23232329;
+}

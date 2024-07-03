@@ -1,0 +1,111 @@
+h2{
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+}
+
+.wrapper {
+    position: relative;
+    width: 500px;
+    height: 550px;
+    background: rgb(19, 19, 19);
+    border: 2px solid rgba(255,255,255,.4);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 3-px rgba(0,0,0,.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /*overflow: hidden;*/
+}
+
+.wrapper .form-box{
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.input-box{
+    position: relative;
+    width: 100%;
+    height:50px;
+    margin-bottom: 50px;
+}
+
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 2px;
+    outline: none;
+    font-size: 1em;
+    color: #fff;
+    font-weight: 600;
+    padding: 0;
+    border: 2px solid rgba(255,255,255,.4);
+}
+
+.input-box label {
+    color: white;
+    font-size: 14px;
+}
+
+.btn-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    margin: 25px;
+}
+
+.save-btn {
+    background: rgb(12, 160, 49);
+    border: 2px solid white;
+    border-radius: 3px;
+    color: white;
+    width: 130px;
+    height: 30px;
+    margin: 10px;
+}
+
+.cancel-btn {
+    background: rgb(174, 20, 20);
+    border: 2px solid white;
+    border-radius: 3px;
+    color: white;
+    width: 130px;
+    height: 30px;
+    margin: 10px;
+}
+
+.save-btn:hover {
+    border: 2px solid rgb(12, 160, 49);
+    background: transparent;
+}
+
+.cancel-btn:hover {
+    border: 2px solid rgb(174, 20, 20);;
+    background: transparent;
+}
+
+input.ng-invalid.ng-touched{
+    border: 2px solid;
+    border-color: red;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px #23232329;
+}

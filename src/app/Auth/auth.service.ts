@@ -3,7 +3,7 @@ import { Inject, Injectable, afterNextRender } from "@angular/core";
 import { environment } from "../../environments/environment.development";
 import { BehaviorSubject, Observable, Subscription, catchError, never, tap, throwError } from "rxjs";
 import { User } from "../shared/user/user.model";
-import { UserData } from "../shared/user.service";
+import { UserData } from "../shared/user/user.service";
 import { Router } from "@angular/router";
 
 export interface signUpData {
@@ -12,6 +12,7 @@ export interface signUpData {
     name: string,
     email: string,
     dateOfBirth: string,
+    image?: File
 }
 
 export interface AuthResponseData {
@@ -30,14 +31,18 @@ export class AuthService {
     }
 
     signup(signupData: signUpData) {
-        return this.http.post<AuthResponseData>(`${environment.API_URL}/public/signup`, 
-        {
-            username: signupData.username,
-            password: signupData.password,
-            name: signupData.name,
-            email: signupData.email,
-            dateOfBirth: signupData.dateOfBirth,
-        })
+        const userData = new FormData();
+        userData.append("username", signupData.username);
+        userData.append("password", signupData.password);
+        userData.append("name", signupData.name);
+        userData.append("email", signupData.email);
+        userData.append("dateOfBirth", signupData.dateOfBirth);
+        if(signupData.image) {
+            userData.append("image", signupData.image, signupData.username)
+        }
+        console.log(userData)
+
+        return this.http.post<AuthResponseData>(`${environment.API_URL}/public/auth/signup`, userData)
         .pipe(
             tap(resData => this.handleAuthentication(resData)),
             catchError(this.handleError)
@@ -60,7 +65,7 @@ export class AuthService {
 
     login(loginData : {email: string, password: string}) {
 
-        return this.http.post<AuthResponseData>(`${environment.API_URL}/public/login`, 
+        return this.http.post<AuthResponseData>(`${environment.API_URL}/public/auth/login`, 
         {
             email: loginData.email,
             password: loginData.password
@@ -89,28 +94,26 @@ export class AuthService {
     }
 
     autoLogin() {
+        console.log('entered autoLogin')
         const userData :{
             _id: string,
             username: string,
             name: string,
             email: string,
             dateOfBirth: string,
+            profileImagePath: string
         } = JSON.parse(localStorage.getItem('user'));
        
-        const expiresIn = JSON.parse(localStorage.getItem('expiresIn'));
         if(userData){
             const user = new User(
                 userData._id, 
                 userData.username,
                 userData.name, 
                 userData.email, 
-                new Date(userData.dateOfBirth)
+                new Date(userData.dateOfBirth),
+                userData.profileImagePath
             );
         
-            console.log(expiresIn)
-            if(expiresIn < 0){
-                return;
-            }
             this.userSubj.next(user);
             this.autoLogout();
         }
@@ -118,9 +121,9 @@ export class AuthService {
 
     logout() {
         this.userSubj.next(null);
-        this.router.navigate(['/login'])
+        this.router.navigate(['/login']);
         localStorage.removeItem('user');
-        localStorage.removeItem('expiresIn');
+        localStorage.removeItem('expirationDate');
         if(this.tokenExpirationTimer){
             clearTimeout(this.tokenExpirationTimer);
         }
@@ -128,39 +131,62 @@ export class AuthService {
     }
 
     autoLogout(){
-        const expiresIn = JSON.parse(localStorage.getItem('expiresIn')) | 0
+        const expirationDate = JSON.parse(localStorage.getItem('expirationDate'));
+        if(!expirationDate){
+            this.logout();
+            return;
+        }     
+        const expiresIn = new Date(expirationDate).getTime() - new Date().getTime()
+        if( expiresIn < 0 ){
+            this.logout();
+            return;
+        }
+        console.log(expiresIn);
         this.tokenExpirationTimer = setTimeout(() => {
             this.logout();
-        }, expiresIn * 1000)
+        }, expiresIn);
     }
 
     handleAuthentication(authData: AuthResponseData) {
-        this.userSubj.next(authData.user);
+        const user: User = {
+            _id: authData.user._id,
+            username: authData.user.username,
+            name: authData.user.name,
+            email: authData.user.email,
+            dateOfBirth: authData.user.dateOfBirth,
+            profileImagePath: authData.user.profileImagePath
+        }
+        this.userSubj.next(user);
+        const expirationDate = new Date(new Date().getTime() + authData.expiresIn * 1000);
         localStorage.setItem('user', JSON.stringify(authData.user));
-        localStorage.setItem('expiresIn', JSON.stringify(authData.expiresIn));
+        localStorage.setItem('expirationDate', JSON.stringify(expirationDate));
         this.autoLogout();
     }
 
     handleError(errorRes: any) {
         console.log(errorRes);
         let errorMessage = 'an unkown error has occurred';
+            console.log(errorRes.error);
+            console.log(errorRes.error.error);
             if(!errorRes.error || !errorRes.error.error){
-                return throwError(() => new Error(errorMessage));
+                return throwError(() => errorMessage);
             }
-            switch (errorRes.error.error.message) {
-                case 'EMAIL_NOT_FOUND':
-                    errorMessage = 'The email you entered was not found';
-                    break;
-                case 'INVALID_PASSWORD':
-                    errorMessage = 'The password you entered is incorrect';
+            switch (errorRes.error.error) {
+                case 'INVALID_CREDENTIALS':
+                    errorMessage = 'The email or password are incorrect.';
                     break;
                 case 'USER_DISABLED':
                     errorMessage = 'Your account has been disabled';
                     break;
-                case 'INVALID_LOGIN_CREDENTIALS':
-                    errorMessage = 'your email or password is incorrect';
-                    break;               
+                case 'USERNAME_EXISTS':
+                    errorMessage = 'This username already exists. Please enter a different username.';
+                    break;
+                case 'EMAIL_EXISTS':
+                    errorMessage = 'This email is already exists. Please enter a different email.';
+                    break;
+                default: 
+                    errorMessage = 'An unkown error has occured.';             
             }
-        return throwError(() => new Error(errorMessage));
+        return throwError(() => errorMessage);
     }
 }

@@ -5,6 +5,7 @@ export class User {
         readonly name: string,
         readonly email: string,
         readonly dateOfBirth: Date,
+        readonly profileImagePath?: string
         ){}
  
 }

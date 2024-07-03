@@ -1,0 +1,18 @@
+.container { 
+    border: 2px solid; 
+    border-color: red; 
+    border-radius: 2px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background: transparent; 
+    padding: auto;
+}
+
+.icon {
+    color: red;
+    font-size: 30px;
+    margin-right: 10px;
+}

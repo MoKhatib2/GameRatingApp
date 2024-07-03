@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment.development";
 import { Review } from "./review.model";
 import { map, tap } from "rxjs";
+import { Game } from "../../Games/game.model";
+import { User } from "../user/user.model";
 
 @Injectable({providedIn: 'root'})
 export class ReviewService {
@@ -23,18 +25,14 @@ export class ReviewService {
     }
 
     getGameReviews(gameName: string) {
-        return this.http.get<Review[]>(`${environment.API_URL}/private/reviews/${gameName}`)
-    }
-
-    setReviews(reviews: Review[]) {
-        return this.http.put(environment.FirebaseURL + '/reviews.json', reviews);
+        return this.http.get<{review: Review, user: User}[]>(`${environment.API_URL}/private/reviews/getReviewsWithUsers/${gameName}`)
     }
 
     addReview(review: Review){
-        return this.http.post(`${environment.API_URL}/private/addReview`, { review })
+        return this.http.post<{game: Game, newOverallRating: number}>(`${environment.API_URL}/private/reviews/addReview`, { review })
     }
 
-    updateReview(review: Review){
-        return this.http.put(`${environment.API_URL}/private/updateReview/${review._id}`, { review })
+    updateReview(review: Review) {
+        return this.http.put<{game: Game, newOverallRating: number}>(`${environment.API_URL}/private/reviews/updateReview/${review._id}`, { review })
     }
 }

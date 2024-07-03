@@ -1,8 +1,10 @@
 <div class="row">
-    <div class="col-xs-12">
-        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-                <label for="">Username</label>
+    <div class="col-xs-12 wrapper">
+        <h2>Create an account</h2>
+        <app-error-box [errorMessage]="errorMessage" boxHeight="70px" *ngIf="errorMessage"></app-error-box>
+        <form class="form-box" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div class="input-box">
+                <label for="username">Username</label>
                 <input
                 name="username"
                 class="form-control" 
@@ -10,8 +12,8 @@
                 formControlName="username"
                 >
             </div>
-            <div class="form-group">
-                <label for="">Name</label>
+            <div class="input-box">
+                <label for="name">Name</label>
                 <input
                 name="name"
                 class="form-control" 
@@ -19,8 +21,8 @@
                 formControlName="name"
                 >
             </div>
-            <div class="form-group">
-                <label for="">Email</label>
+            <div class="input-box">
+                <label for="email">Email</label>
                 <input
                 name="email"
                 class="form-control" 
@@ -28,8 +30,8 @@
                 formControlName="email"
                 >
             </div>
-            <div class="form-group">
-                <label for="">Date of Birth</label>
+            <div class="input-box">
+                <label for="dateOfBirth">Date of Birth</label>
                 <input
                 name="dateOfBirth"
                 class="form-control" 
@@ -37,20 +39,32 @@
                 formControlName="dateOfBirth"
                 >
             </div>
-            <div class="form-group">
-                <label for="">Password</label>
+            <div class="input-box">
+                <label for="password">Password</label>
                 <input
                 name="password"
                 class="form-control" 
                 type="password"
                 formControlName="password"
                 >
+                <p style="font-size: 15px; font-weight: 200; color: red;" 
+                   *ngIf="signupForm.get('password').touched && !signupForm.get('password').valid">
+                   Password must be at least 8 characters.
+                </p>
             </div>
-            <div class="btn-group">
-                <button class="btn btn-success">Signup</button>
-                <button type="button" class="btn btn-default" [routerLink]="['/login']">Already have an account? Login</button>
-            </div>   
+            <div style="width: 100%; margin-bottom: 30px;">
+                <label style="color: white;font-size: 14px;">Profile Image (Optional)</label>
+                <input
+                type="file"
+                (change)="onFileSelect($event)"
+                >
+            </div>
+            <button class="btn-submit" [disabled]="loading">Signup</button>
+            <button type="button" class="btn-go" [routerLink]="['/login']" [disabled]="loading">Already have an account? Login</button>  
         </form>
     </div>
+    <!-- <div class="row">
+        <img [src]="imageData" alt="WHATAEVE BICH" style="height: 40px;width: 40px;">
+    </div> -->
 </div>
 

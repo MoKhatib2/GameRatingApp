@@ -1,0 +1,164 @@
+.profile-pic-container {
+    width: 800px;
+    height: 230px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+    color: white;
+    /* padding: 10px; */
+}
+
+.container {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    border: 1px solid rgb(129, 127, 127);
+    border-radius: 3px;
+    background: rgb(19, 19, 19);
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+input[type="file"] {
+    display: none;
+  }
+  
+.custom-file-upload {
+    width: 210px;
+    height: 40px;
+    background: rgb(81, 79, 79);
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: 500;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.custom-file-upload:hover {
+    background: rgb(114, 111, 111);
+}
+
+.details-container {
+    width: 800px;
+    height: 300px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+    /* padding: 10px; */
+    color: white;
+}
+
+.details-container .container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.user-details {
+    position: relative;
+}
+
+.user-details p{
+    color: white;
+    font-size: 14pt;
+    font-weight: 100;
+}
+
+.btn-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    margin: 25px;
+}
+
+.edit-btn {
+    background: rgb(46, 128, 250);
+    border: 2px solid white;
+    border-radius: 3px;
+    color: white;
+    width: 130px;
+    height: 30px;
+    margin: 10px;
+}
+
+.delete-btn {
+    background: rgb(174, 20, 20);
+    border: 2px solid white;
+    border-radius: 3px;
+    color: white;
+    width: 130px;
+    height: 30px;
+    margin: 10px;
+}
+
+.edit-btn:hover {
+    border: 2px solid rgb(46, 128, 250);
+    background: transparent;
+}
+
+.delete-btn:hover {
+    border: 2px solid rgb(174, 20, 20);;
+    background: transparent;
+}
+
+.mini-container {
+    width: 800px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+    /* padding: 10px; */
+    color: white;
+    margin-bottom: 30px;
+}
+
+.mini-container label {
+    position: relative;
+    margin-right: 20px;
+    color: white;
+    font-size: 13pt;
+    font-weight: 100;
+}
+
+.mini-container input {
+    position: relative;
+    background-color: rgb(63, 62, 62);
+    width: 90%;
+    height: 100%;
+    margin-bottom: 5px;
+}
+
+.emailChange-btn {
+    background: rgb(81, 79, 79);
+    width: 40px;
+    height: 100%;
+    color: white;
+    margin-bottom: 4px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.emailChange-btn:hover {
+    background: rgb(114, 111, 111);
+}

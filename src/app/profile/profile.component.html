@@ -1,0 +1,54 @@
+<div class="profile-pic-container">
+    <h2>Profile Picture</h2>
+    <div class="container">
+        <div style="margin-right: 40px;">
+            <img class="profile-image" [src]="currUser.profileImagePath && currUser.profileImagePath != '' ? currUser.profileImagePath : defaultProfileImagePath " alt="">
+        </div>
+        <div>
+            <label for="file-upload" class="custom-file-upload">
+                {{ currUser.profileImagePath && currUser.profileImagePath != '' ? "Change profile picture" : "Add profile picture"}}
+            </label>
+            <input id="file-upload" type="file" />
+            <p>
+                must be JPG, JPEG, or PNG
+            </p>
+        </div>    
+    </div>     
+</div>
+<div class="mini-container">
+    <h2>Email</h2>  
+    <div class="container">
+        <label for="email">Email</label>
+    <div style="width: 88%; height: 50%;">
+        <input 
+        type="text"
+        name="email"
+        [(ngModel)]="currUserEmail"
+        disabled="true">
+    <button class="emailChange-btn">
+        <fa-icon [icon]="faEdit"></fa-icon>
+    </button> 
+    </div>    
+    </div>  
+</div>
+<div class="details-container">
+    <h2>Profile Details</h2>
+    <div class="container">
+        <div class="user-details">
+            <p>Username: {{ currUser.username }}</p>
+            <p>Name: {{ currUser.name }}</p>
+            <p>Date of Birth: {{ currUser.dateOfBirth| date: 'dd/MM/yyyy'}}</p>
+        </div>
+        <div class="btn-container">
+            <button class="edit-btn" (click)="onEditAccount()">
+                <fa-icon [icon]="faEdit"></fa-icon>
+                Edit Profile
+            </button>
+            <button class="delete-btn" (click)="onDeleteAccount()">
+                <fa-icon [icon]="faTrash"></fa-icon>
+                Delete Account
+            </button>
+        </div>
+    </div> 
+</div>
+

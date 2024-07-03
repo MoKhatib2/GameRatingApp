@@ -4,6 +4,7 @@ import { Subject } from "rxjs";
 @Injectable({providedIn: 'root'})
 export class UiService {
     prevRatingSubj = new Subject<number>();
+    isLoading = new Subject<boolean>();
     
     constructor(){
         

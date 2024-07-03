@@ -3,14 +3,13 @@
     height: 900px;
     width: 147px;
     z-index: 1;
-    display: felx;
+    display: flex;
+    flex-direction: column;
     justify-content: center; 
     align-items: center;
     align-content: center;
     border-radius: 4px;
     opacity: 0.8;
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
     transition: 0.3s;
 }
 
@@ -19,10 +18,18 @@
     transition: 0.3s;
 }
 
+.game-title {
+    color:  rgb(65, 63, 63);
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    align-self: center;
+}
+
 .go-btn{
-    position: absolute;
-    left: 250px;
-    top: 600px;
+    position: relative;
+    margin: 20px;
+    margin-top: 100x;
     width: 150px;
     height: 70px;
     background: rgb(65, 63, 63);

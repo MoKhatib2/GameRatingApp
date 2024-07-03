@@ -13,32 +13,34 @@ import { User } from "../../shared/user/user.model";
 import { AuthService } from "../../Auth/auth.service";
 import { UiService } from "../../shared/ui.service";
 import { Subscription } from "rxjs";
+import { FormatDatePipe } from "../../shared/dateFormat.pipe";
+import { UserService } from "../../shared/user/user.service";
 
 @Component({
     standalone: true,
     selector: 'app-game-details',
-    imports: [FontAwesomeModule, RatingStarsDirective, ReactiveFormsModule, CommonModule],
+    imports: [FontAwesomeModule, RatingStarsDirective, ReactiveFormsModule, CommonModule, FormatDatePipe],
     templateUrl: './game-details.component.html',
     styleUrls: ['./game-details.component.css']
 })
 export class GameDetailsComponent implements OnInit, OnDestroy{
     ratingForm: FormGroup;
     currUser: User;
-    currGameReviews: Review[] = [];
+    currGameReviews: {review: Review, user: User}[] = [];
     gameReviewedBefore: boolean = false;
     reviewID: string = null;
     gameName: string;
-    game: Game = new Game('Red Dead Redemption 2', 'red', 'assets/images/RDR2 icon.png', 147, 127, 'assets/images/RDR2 Full Image', 
-    'America, 1899. The end of the Wild West era has begun. After a robbery goes badly wrong in the western town of Blackwater, Arthur Morgan and the Van der Linde gang are forced to flee. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive. As deepening internal divisions threaten to tear the gang apart, Arthur must make a choice between his own ideals and loyalty to the gang who raised him.', 
-    new Date(), 0, 0);
+    game: Game;
+    usersThatReviewedGame: User[] = [];
+    defaultProfileImagePath: string = '../../assets/images/profileImage.png';
     faStar = faStar;
     faThumbsUp = faThumbsUp;
     faThumbsDown = faThumbsDown;
     ratingErrorMessage : string = null;
-
     getReviewsSub: Subscription;
     addReviewSub: Subscription;
     updateReviewSub: Subscription;
+    usersSub: Subscription;
 
     constructor(
         private authService: AuthService,
@@ -59,22 +61,24 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
         })
 
         this.getReviewsSub = this.reviewService.getGameReviews(this.gameName).subscribe({
-            next: (reviews) => {
-                this.currGameReviews = reviews;
-                const prevReview = this.currGameReviews.filter(r => r.username === this.currUser.username)
-                this.gameReviewedBefore = this.currGameReviews.filter(r => r.username === this.currUser.username).length != 0
-                this.reviewID = prevReview[0]?._id;
-                console.log(reviews)
+            next: (response) => {
+                console.log(response);
+                this.currGameReviews = response;
+                console.log(this.currGameReviews);
+                const prevReview = this.currGameReviews.filter(r => r.review.userID === this.currUser._id)
+                this.gameReviewedBefore = this.currGameReviews.filter(r => r.review.userID === this.currUser._id).length != 0
+                this.reviewID = prevReview[0]?.review._id;
                 if(this.gameReviewedBefore){
                     this.ratingForm.patchValue({
-                        'review': prevReview[0].thoughtsOnGame,
-                        'enoyed': prevReview[0].enjoyedGame,
-                        'rating': prevReview[0].rating
+                        'review': prevReview[0].review.thoughtsOnGame,
+                        'enoyed': prevReview[0].review.enjoyedGame,
+                        'rating': prevReview[0].review.rating
                     })
-                    this.uiService.prevRatingSubj.next(prevReview[0].rating);
+                    this.uiService.prevRatingSubj.next(prevReview[0].review.rating);
                 }
             }
         })
+
     }
     
     ngOnDestroy(): void {
@@ -86,7 +90,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
         }
         if(this.updateReviewSub){
             this.updateReviewSub.unsubscribe();
-        }  
+        } 
     }
 
     initForm() {
@@ -102,7 +106,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
             this.ratingErrorMessage = null;
             
             const review = new Review(
-                this.currUser.username, 
+                this.currUser._id, 
                 this.game.name, 
                 this.ratingForm.get('review').value,
                 this.ratingForm.get('enjoyed').value,
@@ -113,28 +117,30 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
             if(this.gameReviewedBefore){
                 this.updateReviewSub = this.reviewService.updateReview(review).subscribe(
                     {
-                        next: res => console.log(res),
-                        complete: () => {
+                        next: res => {
                             this.uiService.prevRatingSubj.next(review.rating);
                             this.gameReviewedBefore = true;
                             this.currGameReviews = this.currGameReviews.map(r => {
-                                if(r._id === this.reviewID){
-                                    return review;
+                                if(r.review._id === this.reviewID){
+                                    return {review, user: r.user};
                                 } 
                                 return r;
                             });
+                            console.log(res)
+                            this.game.rating = res.newOverallRating;
                         }
                     }
                 )
             } else{
                 this.addReviewSub = this.reviewService.addReview(review).subscribe(
                     {
-                        next: res => console.log(res),
-                        complete: () => {
+                        next: res => {
                             this.uiService.prevRatingSubj.next(review.rating);
                             this.gameReviewedBefore = true;
-                            this.currGameReviews.push(review);
-                        }
+                            this.currGameReviews.push({review, user: this.currUser});
+                            console.log(res)
+                            this.game.rating = res.newOverallRating;
+                        },
                     }
                 )
             }   
