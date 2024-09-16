@@ -1,0 +1,19 @@
+
+:host ::ng-deep .autocomplete input{ 
+    width: 300px;
+    font-size: 18px;
+}
+
+.search-suggestion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    height: 20px;
+    font-size: 18px;
+}
+
+.search-suggestion .name {
+    margin-left: 10px;
+}

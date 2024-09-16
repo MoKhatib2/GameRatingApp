@@ -40,7 +40,9 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
     getReviewsSub: Subscription;
     addReviewSub: Subscription;
     updateReviewSub: Subscription;
+    deleteReviewSub: Subscription;
     usersSub: Subscription;
+    isloading: boolean;
 
     constructor(
         private authService: AuthService,
@@ -59,6 +61,8 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
         this.authService.userSubj.subscribe(user =>{
             this.currUser = user;
         })
+
+        this.uiService.isLoading.subscribe( isloading => this.isloading = isloading );
 
         this.getReviewsSub = this.reviewService.getGameReviews(this.gameName).subscribe({
             next: (response) => {
@@ -91,12 +95,13 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
         if(this.updateReviewSub){
             this.updateReviewSub.unsubscribe();
         } 
+        this.deleteReviewSub?.unsubscribe();
     }
 
     initForm() {
         this.ratingForm = new FormGroup({
             'review': new FormControl(''),
-            'enjoyed': new FormControl(true),
+            'enjoyed': new FormControl(true, Validators.required),
             'rating': new FormControl(null, Validators.required)
         })
     }
@@ -112,8 +117,9 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
                 this.ratingForm.get('enjoyed').value,
                 this.ratingForm.get('rating').value,
                 this.reviewID
-            );
+            );  
 
+            this.uiService.isLoading.next(true);
             if(this.gameReviewedBefore){
                 this.updateReviewSub = this.reviewService.updateReview(review).subscribe(
                     {
@@ -128,6 +134,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
                             });
                             console.log(res)
                             this.game.rating = res.newOverallRating;
+                            this.uiService.isLoading.next(false);
                         }
                     }
                 )
@@ -137,9 +144,11 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
                         next: res => {
                             this.uiService.prevRatingSubj.next(review.rating);
                             this.gameReviewedBefore = true;
-                            this.currGameReviews.push({review, user: this.currUser});
+                            this.currGameReviews.push({review: res.review, user: this.currUser});
                             console.log(res)
                             this.game.rating = res.newOverallRating;
+                            this.reviewID = res.review._id;
+                            this.uiService.isLoading.next(false);
                         },
                     }
                 )
@@ -149,6 +158,29 @@ export class GameDetailsComponent implements OnInit, OnDestroy{
             this.ratingErrorMessage = "please give a rating before submitting"
         }
         
+    }
+
+    onDelete() {
+        this.uiService.isLoading.next(true);
+        this.reviewService.deleteReview(this.reviewID).subscribe(
+            {
+                next: newRating => {
+                    console.log('done')
+                    this.game.rating = newRating;
+                    this.currGameReviews = this.currGameReviews.filter(g => this.reviewID != g.review._id);
+                    this.gameReviewedBefore = false;
+                    this.reviewID = null;
+                    this.usersThatReviewedGame = this.usersThatReviewedGame.filter(u => u._id != this.currUser._id);
+                    this.uiService.prevRatingSubj.next(0);
+                    this.ratingForm.reset();
+                    this.uiService.isLoading.next(false);
+                },
+                error: error => {
+                    console.log(error);
+                    this.uiService.isLoading.next(false);
+                }
+            }
+        )
     }
     
 }

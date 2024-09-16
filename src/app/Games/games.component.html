@@ -1,7 +1,15 @@
 <div class="container">
-    <app-search-games></app-search-games>
-    <!-- <div class="column" *ngFor="let game of games">
-        <app-game-item [game]="game"></app-game-item>
-    </div> -->
+    <div>
+        <app-search-games></app-search-games>
+    </div>
+    <div>
+        <h2>Featured Games</h2>
+        <div class="games-container">
+            <div class="column" *ngFor="let game of games">
+                <app-game-item [game]="game"></app-game-item>
+            </div>
+        </div>
+    </div>
 </div>
 
+ 

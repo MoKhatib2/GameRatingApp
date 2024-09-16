@@ -1,4 +1,16 @@
+h2 {
+    color: white;
+}
+
 .container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.games-container {
     display: inline-flex;
 }
 

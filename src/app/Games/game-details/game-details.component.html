@@ -74,8 +74,8 @@
                     <p style="color: red; font-size: 15px; font-weight: 200;" *ngIf="ratingErrorMessage">please give a rating before submitting</p>
                 </div>
                 <div class="btn-group">
-                    <button class="btn-success" style="margin-right: 20px;">{{ gameReviewedBefore? 'Update Review' : 'Add Review' }}</button> 
-                    <button class="btn-danger" type="button" *ngIf="gameReviewedBefore">Delete Review</button>
+                    <button class="btn-success" style="margin-right: 20px;" [disabled]="isloading">{{ gameReviewedBefore? 'Update Review' : 'Add Review' }}</button> 
+                    <button class="btn-danger" type="button" (click)="onDelete()" [disabled]="isloading" *ngIf="gameReviewedBefore">Delete Review</button>
                 </div>
             </form>
         </div>

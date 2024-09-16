@@ -102,4 +102,27 @@ router.put('/updateReview/:id', async (req, res) => {
     }
 })
 
+router.delete('/deleteReview/:id', async (req, res) => {
+    const reviewID = req.params.id;
+    try {
+        const review = await reviewModel.findOne({_id: reviewID})
+        const game = await gameModel.findOne({name: review.gameName})
+        const newNumOfReviews = game.numOfReviews - 1;
+        var newOverallRating;
+        if(newNumOfReviews != 0) {
+            newOverallRating = ((game.rating * game.numOfReviews) - review.rating)/(newNumOfReviews);
+        } else {
+            newOverallRating = 0;
+        }
+        console.log(review);
+        console.log(game);
+        console.log(newOverallRating);
+        await gameModel.findOneAndUpdate({name: game.name},{rating: newOverallRating, numOfReviews: newNumOfReviews});
+        await reviewModel.findByIdAndDelete({_id: reviewID});
+        res.status(200).json(newOverallRating);
+    } catch(error) {
+        res.status(400).json({error});
+    }
+})
+
 module.exports = router;

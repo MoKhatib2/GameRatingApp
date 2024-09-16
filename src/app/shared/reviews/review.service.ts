@@ -29,10 +29,14 @@ export class ReviewService {
     }
 
     addReview(review: Review){
-        return this.http.post<{game: Game, newOverallRating: number}>(`${environment.API_URL}/private/reviews/addReview`, { review })
+        return this.http.post<{review: Review, newOverallRating: number}>(`${environment.API_URL}/private/reviews/addReview`, { review })
     }
 
     updateReview(review: Review) {
-        return this.http.put<{game: Game, newOverallRating: number}>(`${environment.API_URL}/private/reviews/updateReview/${review._id}`, { review })
+        return this.http.put<{review: Review, newOverallRating: number}>(`${environment.API_URL}/private/reviews/updateReview/${review._id}`, { review })
+    }
+
+    deleteReview(reviewID: string) {
+        return this.http.delete<number>(`${environment.API_URL}/private/reviews/deleteReview/${reviewID}`)
     }
 }
